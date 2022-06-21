@@ -1,4 +1,5 @@
 * {
+    font-family: 'Anek Latin', sans-serif;
     margin: 0;
     overflow-x: hidden;
 }
@@ -25,27 +26,23 @@ header img {
 }
 
 header h1 {
-    font-family: "Comic Sans MS", cursive;
     font-size: 3em;
     color: rgba(43, 43, 43, 0.74);
 }
 
 main h1 {
-    font-family: "Comic Sans MS", cursive;
     font-size: 2em;
     color: rgba(43, 43, 43, 0.74);
     margin-top: 5vh;
     margin-left: 5vw;
 }
 main h2 {
-    font-family: "Comic Sans MS", cursive;
     font-size: 1.2em;
     color: black;
     margin-top: 2.5vh;
 }
 #backButton{
     background-color: white;
-    font-family: "Comic Sans MS", cursive;
     font-size: 1em;
     color: lightskyblue;
     border: 2px solid cornflowerblue;
@@ -54,14 +51,13 @@ main h2 {
 }
 main button{
     background-color: white;
-    font-family: "Comic Sans MS", cursive;
     font-size: 1em;
     color: #fd4501;
     border: 2px solid #fd4501;
     border-radius: 7%;
 }
 main input{
-    height: 2em;
+    font-size: 0.8em;
 }
 
 button :hover{

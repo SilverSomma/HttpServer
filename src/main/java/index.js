@@ -19,15 +19,15 @@ function createSalaryCalculatorRequest() {
         if (err != null) {
             console.error(err);
         } else {
-            document.getElementById("employerExpense").textContent = `${data.employerExpense}`;
-            document.getElementById("socialTax").textContent = `${data.socialTax}`;
-            document.getElementById("insuranceByEmployer").textContent = `${data.unemploymentInsuranceByEmployer}`;
-            document.getElementById("grossSalary").textContent = `${data.grossSalary}`;
-            document.getElementById("pension").textContent = `${data.pension}`;
-            document.getElementById("insuranceByEmployee").textContent = `${data.unemploymentInsuranceByEmployee}`;
-            document.getElementById("incomeTaxFree").textContent = `${data.taxExemption}`;
-            document.getElementById("incomeTax").textContent = `${data.incomeTax}`;
-            document.getElementById("netSalary").textContent = `${data.netSalary}`;
+            document.getElementById("employerExpense").textContent = `${data.employerExpense} `+"€";
+            document.getElementById("socialTax").textContent = `${data.socialTax} `+"€";
+            document.getElementById("insuranceByEmployer").textContent = `${data.unemploymentInsuranceByEmployer} `+"€";
+            document.getElementById("grossSalary").textContent = `${data.grossSalary} `+"€";
+            document.getElementById("pension").textContent = `${data.pension} `+"€";
+            document.getElementById("insuranceByEmployee").textContent = `${data.unemploymentInsuranceByEmployee} `+"€";
+            document.getElementById("incomeTaxFree").textContent = `${data.taxExemption} `+"€";
+            document.getElementById("incomeTax").textContent = `${data.incomeTax} `+"€";
+            document.getElementById("netSalary").textContent = `${data.netSalary} `+"€";
         }
     });
 }
