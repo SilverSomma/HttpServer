@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+main {
+    background-color: rgba(43, 43, 43, 0.51);
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #eeab7e;
+    height: 22vh;
+    width: 100vw;
+    overflow-x: hidden;
+    margin-bottom: 0;
+}
+
+header img {
+    height: 10vh;
+    width: auto;
+    margin-top: 6.5vh;
+}
+
+header h1 {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 3em;
+    color: rgba(43, 43, 43, 0.74);
+}
+
+main h1 {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 2em;
+    color: rgba(43, 43, 43, 0.74);
+    margin-top: 5vh;
+    margin-left: 5vw;
+}
+main h2 {
+    font-family: "Comic Sans MS", cursive;
+    font-size: 1.2em;
+    color: black;
+    margin-top: 2.5vh;
+}
+#backButton{
+    background-color: white;
+    font-family: "Comic Sans MS", cursive;
+    font-size: 1em;
+    color: lightskyblue;
+    border: 2px solid cornflowerblue;
+    border-radius: 7%;
+    margin-left: 1.5vw;
+}
+main button{
+    background-color: white;
+    font-family: "Comic Sans MS", cursive;
+    font-size: 1em;
+    color: #fd4501;
+    border: 2px solid #fd4501;
+    border-radius: 7%;
+}
+main input{
+    height: 2em;
+}
+
+button :hover{
+    background-color: gray;
+}
+.fields{
+    display: inline-block;
+}
+.values{
+    display: inline-block;
+   margin-left: 13vw;
+}
+.tableContent{
+    margin-top: 5vh;
+    margin-left: 5vw;
+}
+h3{
+    color: rgba(43, 43, 43, 0.51);
+}

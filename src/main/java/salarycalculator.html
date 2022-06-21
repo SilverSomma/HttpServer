@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./indexStyles.css">
+    <script src= "index.js" type="text/javascript"></script>
+    <title>CodeBorne Multifunctional Application</title>
+</head>
+<body>
+<header>
+    <h1><img src="../resources/cb_logo.png"> salary calculator</h1>
+
+</header>
+<main>
+    <h1>Sisesta brutopalk <input value = "0" type="text" id="salary"> <a id="salaryHyperLink" href="#" onclick=createSalaryCalculatorRequest();><button>Arvuta!</button></a><a href="http://localhost:8080/"><button id="backButton">Tagasi.</button></a></h1>
+    <div class="tableContent">
+    <div class="fields">
+    <h2>Tööandja kulu:</h2>
+    <h2>Sotsiaalmaks:</h2>
+    <h2>Töötukindlustusmakse (tööandja):</h2>
+    <h2>Brutopalk:</h2>
+    <h2>Kogumispension (II sammas):</h2>
+    <h2>Töötuskindlustusmakse (töötaja):</h2>
+    <h2>Tulumaksuvaba tulu:</h2>
+    <h2>Tulumaks:</h2>
+    <h2>Netopalk:</h2>
+    </div>
+    <div class="values">
+        <h2 id="employerExpense">0 €</h2>
+        <h2 id="socialTax">0 €</h2>
+        <h2 id="insuranceByEmployer" >0 €</h2>
+        <h2 id="grossSalary">0 €</h2>
+        <h2 id="pension">0 €</h2>
+        <h2 id="insuranceByEmployee">0 €</h2>
+        <h2 id="incomeTaxFree">0 €</h2>
+        <h2 id="incomeTax">0 €</h2>
+        <h2 id="netSalary">0 €</h2>
+    </div>
+    </div>
+</main>
+</body>
+</html>
