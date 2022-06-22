@@ -77,3 +77,7 @@ button :hover{
 h3{
     color: rgba(43, 43, 43, 0.51);
 }
+#gallery img {
+    width: 32vw;
+    height: auto;
+}

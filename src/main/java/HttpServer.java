@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import salarycalculatorjava.GrossSalary;
@@ -5,11 +6,14 @@ import salarycalculatorjava.SalaryCalculatorService;
 import salarycalculatorjava.SalaryInformationResponse;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpServer {
@@ -55,6 +59,11 @@ public class HttpServer {
     private static String routeHandler(String requestPath, Map<String, String> params) throws IOException {
         if (requestPath.contains(".jpg") || requestPath.contains(".jpeg") || requestPath.contains(".png") || requestPath.contains(".ico")) {
             return "./resources/" + requestPath;
+        } else if (requestPath.contains(".json")) {
+            if (requestPath.contains("getpicturelist")) {
+                createPictureListJson();
+                return "./src/main/java/getpicturelist.json";
+            }
         } else if (requestPath.contains(".js") || requestPath.contains(".css")) {
             return "./src/main/java/" + requestPath;
         } else if (requestPath.equals("")) {
@@ -70,7 +79,22 @@ public class HttpServer {
         return "File not found.";
     }
 
-    private static void createSalaryResponseJson(Map<String,String> params) throws IOException {
+    private static void createPictureListJson() throws IOException {
+        File[] resourcesFiles = new File("./resources").listFiles();
+        List<String> names = new ArrayList<>();
+        for (File resourcesFile : resourcesFiles) {
+            names.add(resourcesFile.getName());
+        }
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(names);
+
+        OutputStream out = new FileOutputStream("./src/main/java/getpicturelist.json");
+        out.write(json.getBytes(StandardCharsets.UTF_8));
+        out.close();
+    }
+
+    private static void createSalaryResponseJson(Map<String, String> params) throws IOException {
         SalaryInformationResponse response = SalaryCalculatorService.getSalaryInformation(new GrossSalary(new BigDecimal(params.get("salary"))));
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
