@@ -1,10 +1,10 @@
-package salarycalculatorjava;
+package backend.salarycalculatorjava;
 
 
 import java.math.BigDecimal;
 
 import static java.math.RoundingMode.HALF_UP;
-import static salarycalculatorjava.SalaryCalculatorService.*;
+import static backend.salarycalculatorjava.SalaryCalculatorService.*;
 
 
 public class TotalExpense extends CalculatorInput {

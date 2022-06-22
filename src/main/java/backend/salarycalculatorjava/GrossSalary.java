@@ -1,10 +1,10 @@
-package salarycalculatorjava;
+package backend.salarycalculatorjava;
 
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static salarycalculatorjava.SalaryCalculatorService.*;
+import static backend.salarycalculatorjava.SalaryCalculatorService.*;
 
 
 public class GrossSalary extends CalculatorInput {

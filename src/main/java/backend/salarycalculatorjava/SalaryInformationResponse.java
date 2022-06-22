@@ -1,4 +1,4 @@
-package salarycalculatorjava;
+package backend.salarycalculatorjava;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,4 +1,4 @@
-package salarycalculatorjava;
+package backend.salarycalculatorjava;
 
 public abstract class CalculatorInput {
 

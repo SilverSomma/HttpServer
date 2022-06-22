@@ -1,0 +1,11 @@
+{
+  "employerExpense" : 2007.00,
+  "socialTax" : 495.00,
+  "unemploymentInsuranceByEmployer" : 12.00,
+  "grossSalary" : 1500.00,
+  "pension" : 30.00,
+  "unemploymentInsuranceByEmployee" : 24.00,
+  "taxExemption" : 333.33,
+  "incomeTax" : 222.53,
+  "netSalary" : 1223.47
+}
