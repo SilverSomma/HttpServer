@@ -57,7 +57,7 @@ function getImagesNameList() {
 
 function getProjectFiles(path) {
     sessionStorage.setItem("path",path+"/")
-    getJSON("http://localhost:8080/getprojectfiles?path=./" + path, "json", (err, data) => {
+    getJSON("http://localhost:8080/getprojectfiles?path=." + path, "json", (err, data) => {
         if (err != null) {
             console.log(err);
         } else {
@@ -75,10 +75,16 @@ function displayProjectFiles(fileList) {
     for (let i = 0; i < fileList.length; i++) {
         var a = document.createElement('a');
         var file = document.createElement('h4');
-        a.onclick = function (){
-            getProjectFiles(sessionStorage.getItem("path") + fileList[i]);
-        };
+        var folder = document.createElement("i");
+        folder.className = "fa-solid fa-folder";
+
         file.textContent = fileList[i];
+        if (!fileList[i].substring(2).includes(".")) {
+            a.onclick = function (){
+                getProjectFiles(sessionStorage.getItem("path") + fileList[i]);
+            }
+            file.appendChild(folder);
+        }
         a.appendChild(file);
         document.getElementById('files').appendChild(a);
     }

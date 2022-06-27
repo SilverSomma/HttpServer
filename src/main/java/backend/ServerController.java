@@ -26,7 +26,7 @@ public class ServerController {
                 createSalaryResponseJson(params);
                 return "./src/main/java/backend/json/salaryResponse.json";
             }else if (requestPath.contains("getprojectfiles?")) {
-                getProjectFiles(params);
+                getProjectFiles(params, requestPath);
                 return "./src/main/java/backend/json/getProjectFiles.json";
             }
         } else {

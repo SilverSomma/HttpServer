@@ -116,6 +116,11 @@ a{
 text-decoration:none;
 }
 i{
+    font-size: 0.7em;
+    color: #eeab7e;
+    margin-left: 3vw;
+}
+#browseBack {
     font-size: 2.7em;
     color: #eeab7e;
     border: 3px solid black;
