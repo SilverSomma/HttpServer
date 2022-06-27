@@ -1,5 +1,7 @@
 package backend;
 
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -34,6 +36,8 @@ public class HttpServer {
                 byte[] fileBytes = getHtmlBytes(filePath);
                 socket.getOutputStream().write(CODE200);
                 socket.getOutputStream().write(fileBytes);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
 

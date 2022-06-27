@@ -77,10 +77,25 @@ public class ServerService {
         int pathBeginning = firstRow.indexOf("/") + 1;
         int pathEnd = firstRow.indexOf(" ", pathBeginning);
         String requestedFile = firstRow.substring(pathBeginning, pathEnd);
-        if (requestedFile.contains("/")) {
+        if (requestedFile.contains("/")&& !(requestedFile.contains("./"))) {
             return requestedFile.substring(requestedFile.lastIndexOf("/"));
         }
         return requestedFile;
     }
+
+    protected static void getProjectFiles(Map<String, String> params) throws IOException {
+        String[] files = new File(params.get("path")).list();
+        ObjectMapper obj = new ObjectMapper();
+        try {
+            String json = obj.writeValueAsString(files);
+            OutputStream out = new FileOutputStream("./src/main/java/backend/json/getProjectFiles.json");
+            out.write(json.getBytes(StandardCharsets.UTF_8));
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

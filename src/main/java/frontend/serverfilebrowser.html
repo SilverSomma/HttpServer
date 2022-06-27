@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://kit.fontawesome.com/ba04db7616.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Akshar&family=Anek+Latin&family=Montserrat:wght@100&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="indexstyles.css">
     <script src= "index.js" type="text/javascript"></script>
     <title>CodeBorne Multifunctional Application</title>
 </head>
-<body onload=getImagesNameList();>
+<body onload=getProjectFiles("");>
 <header>
-    <h1><img src="../resources/cb_logo.png"> server gallery</h1>
+    <h1><img src="../resources/cb_logo.png"> server file browser</h1>
+
 </header>
 <nav>
     <h1><a href="http://localhost:8080/"><button id="backButton">Tagasi</button></a></h1>
 </nav>
 <main>
-    <div id="gallery">
+<div id="files">
+    <a onclick=browseBack()><i class="fa-solid fa-backward"></i></a>
 
-    </div>
+</div>
 </main>
 </body>
 </html>

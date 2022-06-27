@@ -1,14 +1,15 @@
 package backend;
 
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.util.Map;
 
-import static backend.ServerService.createPictureListJson;
-import static backend.ServerService.createSalaryResponseJson;
+import static backend.ServerService.*;
 
 public class ServerController {
 
-    protected static String controller(String requestPath, Map<String, String> params) throws IOException {
+    protected static String controller(String requestPath, Map<String, String> params) throws IOException, ParseException {
         if (requestPath.contains(".jpg") || requestPath.contains(".jpeg") || requestPath.contains(".png") || requestPath.contains(".ico")) {
             return "./resources/" + requestPath;
         } else if (requestPath.contains(".json")) {
@@ -24,6 +25,9 @@ public class ServerController {
             if (requestPath.contains("salarycalculator?")) {
                 createSalaryResponseJson(params);
                 return "./src/main/java/backend/json/salaryResponse.json";
+            }else if (requestPath.contains("getprojectfiles?")) {
+                getProjectFiles(params);
+                return "./src/main/java/backend/json/getProjectFiles.json";
             }
         } else {
             return "./src/main/java/frontend/" + requestPath + ".html";
