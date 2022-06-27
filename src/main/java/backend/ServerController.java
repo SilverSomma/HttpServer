@@ -10,7 +10,15 @@ import static backend.ServerService.*;
 public class ServerController {
 
     protected static String controller(String requestPath, Map<String, String> params) throws IOException, ParseException {
-        if (requestPath.contains(".jpg") || requestPath.contains(".jpeg") || requestPath.contains(".png") || requestPath.contains(".ico")) {
+        if (requestPath.contains("?")) {
+            if (requestPath.contains("salarycalculator?")) {
+                createSalaryResponseJson(params);
+                return "./src/main/java/backend/json/salaryResponse.json";
+            } else if (requestPath.contains("getprojectfiles?")) {
+                getProjectFiles(params);
+                return "./src/main/java/backend/json/getProjectFiles.json";
+            }
+        } else if (requestPath.contains(".jpg") || requestPath.contains(".jpeg") || requestPath.contains(".png") || requestPath.contains(".ico")) {
             return "./resources/" + requestPath;
         } else if (requestPath.contains(".json")) {
             if (requestPath.contains("getpicturelist")) {
@@ -21,14 +29,6 @@ public class ServerController {
             return "./src/main/java/frontend/" + requestPath;
         } else if (requestPath.equals("")) {
             return "./src/main/java/frontend/index.html";
-        } else if (requestPath.contains("?")) {
-            if (requestPath.contains("salarycalculator?")) {
-                createSalaryResponseJson(params);
-                return "./src/main/java/backend/json/salaryResponse.json";
-            }else if (requestPath.contains("getprojectfiles?")) {
-                getProjectFiles(params, requestPath);
-                return "./src/main/java/backend/json/getProjectFiles.json";
-            }
         } else {
             return "./src/main/java/frontend/" + requestPath + ".html";
         }

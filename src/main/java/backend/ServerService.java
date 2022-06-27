@@ -83,24 +83,26 @@ public class ServerService {
         return requestedFile;
     }
 
-    protected static void getProjectFiles(Map<String, String> params, String requestPath) throws IOException {
+    protected static void getProjectFiles(Map<String, String> params) throws IOException {
         String path = params.get("path");
         ObjectMapper obj = new ObjectMapper();
         OutputStream out = new FileOutputStream("./src/main/java/backend/json/getProjectFiles.json");
         String[] files = new String[0];
         String json="";
-//        if (path.equals("./")) {
-//            files = new File(params.get("path")).list();
-//            json = obj.writeValueAsString(files);
-//        } else if(path.substring(path.length() - 4).contains(".")) {
-//            String file = new File(path).toString();
-//            json = obj.writeValueAsString(file);
-//        }else {
+        if (path.equals("./")) {
             files = new File(params.get("path")).list();
             json = obj.writeValueAsString(files);
-//        }
-        try {
             out.write(json.getBytes(StandardCharsets.UTF_8));
+        } else if(path.substring(path.length() - 4).contains(".")) {
+            File file = new File(path);
+            InputStream in = new FileInputStream(file);
+            out.write(in.readAllBytes());
+        }else {
+            files = new File(params.get("path")).list();
+            json = obj.writeValueAsString(files);
+            out.write(json.getBytes(StandardCharsets.UTF_8));
+        }
+        try {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();

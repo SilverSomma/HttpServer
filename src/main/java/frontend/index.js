@@ -61,32 +61,59 @@ function getProjectFiles(path) {
         if (err != null) {
             console.log(err);
         } else {
-            fileNames = `${data}`
-            displayProjectFiles(fileNames.split(","));
+            let response = `${data}`
+            const fileNames = response.split(",")
+            displayProjectFiles(fileNames, true);
         }
     });
 }
 
-function displayProjectFiles(fileList) {
+function getProjectFileContent(path) {
+    sessionStorage.setItem("path",path+"/")
+    getJSON("http://localhost:8080/getprojectfiles?path=." + path, "arraybuffer", (err, data) => {
+        if (err != null) {
+            console.log(err);
+        } else {
+            let response = String(`${data}`);
+            console.log(response);
+            displayProjectFiles(response, false);
+        }
+    });
+}
+
+function displayProjectFiles(response, isFolder) {
     var lines = document.querySelectorAll("h4");
+    var paragraphs = document.querySelectorAll("p");
     lines.forEach(line => {
         line.remove();
     });
-    for (let i = 0; i < fileList.length; i++) {
-        var a = document.createElement('a');
-        var file = document.createElement('h4');
-        var folder = document.createElement("i");
-        folder.className = "fa-solid fa-folder";
-
-        file.textContent = fileList[i];
-        if (!fileList[i].substring(2).includes(".")) {
-            a.onclick = function (){
-                getProjectFiles(sessionStorage.getItem("path") + fileList[i]);
+    paragraphs.forEach(line=>{
+        line.remove();
+    });
+    if (isFolder) {
+        for (let i = 0; i < response.length; i++) {
+            var a = document.createElement('a');
+            var text = document.createElement('h4');
+            var folder = document.createElement("i");
+            folder.className = "fa-solid fa-folder";
+            text.textContent = response[i];
+            if (!response[i].substring(2).includes(".")) {
+                a.onclick = function () {
+                    getProjectFiles(sessionStorage.getItem("path") + response[i]);
+                };
+                text.appendChild(folder);
+            } else {
+                a.onclick = function () {
+                    getProjectFileContent(sessionStorage.getItem("path") + response[i]);
+                };
             }
-            file.appendChild(folder);
+            a.appendChild(text);
+            document.getElementById('files').appendChild(a);
         }
-        a.appendChild(file);
-        document.getElementById('files').appendChild(a);
+    } else {
+        let p = document.createElement("p");
+        p.textContent = response;
+        document.getElementById('files').appendChild(p);
     }
 }
 
