@@ -56,41 +56,58 @@ function getImagesNameList() {
 }
 
 function getProjectFiles(path) {
-    sessionStorage.setItem("path",path+"/")
+    sessionStorage.setItem("path", path + "/")
     getJSON("http://localhost:8080/getprojectfiles?path=." + path, "json", (err, data) => {
         if (err != null) {
             console.log(err);
         } else {
             let response = `${data}`
             const fileNames = response.split(",")
-            displayProjectFiles(fileNames, true);
+            displayProjectFiles(fileNames, "folder");
         }
     });
 }
 
 function getProjectFileContent(path) {
-    sessionStorage.setItem("path",path+"/")
-    getJSON("http://localhost:8080/getprojectfiles?path=." + path, "arraybuffer", (err, data) => {
+    sessionStorage.setItem("path", path + "/")
+    getJSON("http://localhost:8080/getprojectfiles?path=." + path, "text", (err, data) => {
         if (err != null) {
             console.log(err);
         } else {
             let response = String(`${data}`);
-            console.log(response);
-            displayProjectFiles(response, false);
+            if ((path.includes(".jpg"))||(path.includes(".jpeg"))||(path.includes(".png"))||(path.includes(".ico"))) {
+                displayProjectFiles(response, "image");
+            } else {
+                displayProjectFiles(response, "file");
+            }
         }
     });
 }
 
-function displayProjectFiles(response, isFolder) {
+function displayProjectFiles(response, type) {
+    var container = document.querySelector("#files");
     var lines = document.querySelectorAll("h4");
-    var paragraphs = document.querySelectorAll("p");
+    var paragraphs = document.querySelectorAll("textarea");
+    var images = container.querySelectorAll("img");
+    var anchors = container.querySelectorAll("a");
     lines.forEach(line => {
         line.remove();
     });
-    paragraphs.forEach(line=>{
-        line.remove();
+    paragraphs.forEach(paragraph => {
+        paragraph.remove();
     });
-    if (isFolder) {
+    images.forEach(image => {
+        image.remove();
+    });
+    anchors.forEach(anchor=>{
+        anchor.remove();
+    })
+    if (type === "image") {
+        let img = new Image()
+        // let img = document.createElement("img");
+        img.src = 'data:image/png;base64,'+response;
+        document.getElementById('files').appendChild(img);
+    } else if (type === "folder") {
         for (let i = 0; i < response.length; i++) {
             var a = document.createElement('a');
             var text = document.createElement('h4');
@@ -110,18 +127,17 @@ function displayProjectFiles(response, isFolder) {
             a.appendChild(text);
             document.getElementById('files').appendChild(a);
         }
-    } else {
-        let p = document.createElement("p");
+    } else if (type === "file") {
+        let p = document.createElement("textarea");
         p.textContent = response;
         document.getElementById('files').appendChild(p);
     }
 }
 
-function browseBack(){
+function browseBack() {
     var path = sessionStorage.getItem("path");
     var removeLastSlash = path.substring(0, path.lastIndexOf("/"));
     var newPath = removeLastSlash.substring(0, removeLastSlash.lastIndexOf("/"));
-    console.log(newPath);
     getProjectFiles(newPath);
 }
 

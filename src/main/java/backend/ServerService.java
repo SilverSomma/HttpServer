@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ServerService {
 
@@ -93,10 +90,18 @@ public class ServerService {
             files = new File(params.get("path")).list();
             json = obj.writeValueAsString(files);
             out.write(json.getBytes(StandardCharsets.UTF_8));
-        } else if(path.substring(path.length() - 4).contains(".")) {
-            File file = new File(path);
-            InputStream in = new FileInputStream(file);
-            out.write(in.readAllBytes());
+        } else if(path.substring(path.length() - 5).contains(".")) {
+            String extension = path.substring(path.length() - 5);
+            if (extension.contains(".jpg") || extension.contains(".ico") || extension.contains(".png") || extension.contains(".jpeg")) {
+                File file = new File(params.get("path"));
+                byte[] bytes = new FileInputStream(file).readAllBytes();
+                byte[] encoded = Base64.getEncoder().encode(bytes);
+                out.write(encoded);
+            } else {
+                File file = new File(path);
+                InputStream in = new FileInputStream(file);
+                out.write(in.readAllBytes());
+            }
         }else {
             files = new File(params.get("path")).list();
             json = obj.writeValueAsString(files);

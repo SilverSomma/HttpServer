@@ -129,6 +129,19 @@ i{
     margin-left: 3vw;
     margin-top: 3vw;
 }
+textarea{
+    width: 40vw;
+    height: 60vh;
+    margin-left: 3vw;
+    margin-top: 3vh;
+    overflow-y: scroll;
+}
+#files img {
+    width: 40vw;
+    height: auto;
+    margin-left: 3vw;
+    margin-top: 3vh;
+}
 
 
 
