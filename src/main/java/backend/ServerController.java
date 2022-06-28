@@ -15,7 +15,7 @@ public class ServerController {
                 createSalaryResponseJson(params);
                 return "./src/main/java/backend/json/salaryResponse.json";
             } else if (requestPath.contains("getprojectfiles?")) {
-                getProjectFiles(params);
+                writeProjectFiles(params);
                 return "./src/main/java/backend/json/getProjectFiles.json";
             }
         } else if (requestPath.contains(".jpg") || requestPath.contains(".jpeg") || requestPath.contains(".png") || requestPath.contains(".ico")) {

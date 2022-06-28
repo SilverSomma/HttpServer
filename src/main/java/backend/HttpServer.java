@@ -20,7 +20,6 @@ public class HttpServer {
     public static void main(String[] args) throws IOException {
         runServer(8080);
     }
-
     private static void runServer(int port) throws IOException {
         final ServerSocket server = new ServerSocket(port);
         Map<String, String> params = null;
@@ -32,7 +31,6 @@ public class HttpServer {
                     params = getParams(requestPath);
                 }
                 String filePath = controller(requestPath, params);
-                System.out.println(requestPath);
                 byte[] fileBytes = getHtmlBytes(filePath);
                 socket.getOutputStream().write(CODE200);
                 socket.getOutputStream().write(fileBytes);
@@ -40,8 +38,5 @@ public class HttpServer {
                 e.printStackTrace();
             }
         }
-
     }
-
-
 }

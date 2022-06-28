@@ -46,6 +46,9 @@ header h1 {
     font-size: 3em;
     color: rgba(43, 43, 43, 0.74);
 }
+.mainHeader{
+    padding-bottom: 5vh;
+}
 
 
 main h1 {
@@ -61,11 +64,13 @@ main h2 {
 }
 #backButton{
     background-color: white;
-    font-size: 1em;
-    color: lightskyblue;
-    border: 2px solid cornflowerblue;
+    font-size: 1.4em;
+    color: #ff9d3a;
+    border: 1px solid #000000;
     border-radius: 7%;
-    margin-left: 1.5vw;
+    margin-left: 3vw;
+    margin-top: 2.3vh;
+    padding-bottom:0.5vh;
 }
 main button{
     background-color: white;
@@ -105,8 +110,8 @@ h3{
 h4{
     font-size: 1.7em;
     border-bottom: 2px solid black;
-    margin-top: 3vh;
-    margin-bottom: 3vh;
+    margin-top: 2.5vh;
+    margin-bottom: 2.5vh;
     margin-left: 3vw;
     padding-left:1vw;
     padding-bottom:1vw;
@@ -116,9 +121,9 @@ a{
 text-decoration:none;
 }
 i{
-    font-size: 0.7em;
+    font-size: 0.8em;
     color: #eeab7e;
-    margin-left: 3vw;
+    margin-left: 2vw;
 }
 #browseBack {
     font-size: 2.7em;
