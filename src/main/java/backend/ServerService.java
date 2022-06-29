@@ -14,6 +14,9 @@ import java.util.*;
 public class ServerService {
 
     protected static Map<String, String> getParams(String request) {
+        if(!request.contains("?")){
+            return null;
+        }
         Map<String, String> params = new HashMap<>();
         int variableStartIndex = request.indexOf("?");
         request = request.substring(variableStartIndex + 1);

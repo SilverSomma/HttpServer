@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 import static backend.ServerController.controller;
@@ -22,14 +23,11 @@ public class HttpServer {
     }
     private static void runServer(int port) throws IOException {
         final ServerSocket server = new ServerSocket(port);
-        Map<String, String> params = null;
         while (true) {
             try (Socket socket = server.accept()) {
                 InputStream rawRequestData = socket.getInputStream();
                 String requestPath = getRequestPath(rawRequestData);
-                if (requestPath.contains("?")) {
-                    params = getParams(requestPath);
-                }
+                Map<String,String> params = getParams(requestPath);
                 String filePath = controller(requestPath, params);
                 byte[] fileBytes = getHtmlBytes(filePath);
                 socket.getOutputStream().write(CODE200);

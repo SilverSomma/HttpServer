@@ -103,3 +103,36 @@ function browseBack() {
 function isImage(path) {
     return (path.includes(".jpg")) || (path.includes(".jpeg")) || (path.includes(".png")) || (path.includes(".ico"));
 }
+function toggleNewFileWindow() {
+    let window = document.querySelector(".newFileWindow");
+    let main = document.querySelector(".mainDiv");
+    if (window.classList.contains("hidden")) {
+        window.classList.remove("hidden");
+        main.classList.add("blur");
+        main.classList.add("disabled");
+    }else{
+        window.classList.add("hidden");
+        main.classList.remove("blur");
+        main.classList.remove("disabled");
+    }
+}
+
+
+function postFile() {
+    const fileTypeInput = document.querySelector("select").value;
+    const fileNameInput = document.querySelector("input").value;
+    console.log(fileTypeInput);
+    console.log(fileNameInput);
+    if (!isValidFilePostRequest(fileNameInput)) {
+        alert("Midagi valesti")
+    }
+}
+
+function isValidFilePostRequest(fileTypeInput, fileNameInput) {
+    const validFileExtensions = [".jpg",".png",".ico", ""]
+    if (fileNameInput.includes()) {
+
+    }
+
+    return false;
+}

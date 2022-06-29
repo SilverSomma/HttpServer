@@ -12,18 +12,38 @@
     <title>CodeBorne Multifunctional Application</title>
 </head>
 <body onload=getFolderList("/");>
-<header>
+<div class="newFileWindow hidden">
+    <h5>Create new file.</h5>
+    <form action="" id="newFileForm">
+    <label for="fileTypeSelector"> Choose type...</label>
+        <br>
+    <select name = "fileTypeSelector" id="fileTypeSelector">
+        <option selected value="Folder">Folder</option>
+        <option value="File">File</option>
+    </select>
+        <br>
+    <label for="fileNameInput">Give the new file a name...</label>
+        <br>
+    <input type="text" id="fileNameInput" name="fileNameInput">
+        <br>
+        <h5 id="secondFormHeading">Or choose file from computer...</h5>
+       <input type="file">
+        <br>
+        <button type="button" onclick="toggleNewFileWindow()">Back</button><button onclick=postFile() id="saveButton">Save</button>
+    </form>
+</div>
+<div class="mainDiv">
+    <header>
     <h1><img src="../resources/cb_logo.png"> server file browser</h1>
-
 </header>
-<nav>
+    <nav>
     <h1><a href="http://localhost:8080/"><button id="backButton">Tagasi</button></a></h1>
 </nav>
-<main>
-    <a onclick=browseBack()><i id="browseBack" class="fa-solid fa-backward"></i></a>
+    <main>
+    <a onclick=browseBack()><i id="browseBack" class="fa-solid fa-backward"></i></a><a onclick=toggleNewFileWindow()><i id="newFileWindowButton" class="fa-solid fa-folder-plus"></i></a>
     <div id="files">
-
-</div>
+    </div>
 </main>
+</div>
 </body>
 </html>

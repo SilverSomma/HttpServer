@@ -63,7 +63,7 @@ main h2 {
     margin-top: 2.5vh;
 }
 #backButton{
-    background-color: white;
+    background-color: #d6d7d7;
     font-size: 1.4em;
     color: #ff9d3a;
     border: 1px solid #000000;
@@ -116,6 +116,7 @@ h4{
     padding-left:1vw;
     padding-bottom:1vw;
 }
+
 a{
     color: black;
 text-decoration:none;
@@ -126,6 +127,16 @@ i{
     margin-left: 2vw;
 }
 #browseBack {
+    font-size: 2.7em;
+    color: #eeab7e;
+    border: 3px solid black;
+    border-radius: 10%;
+    padding:5px;
+    margin-left: 3vw;
+    margin-top: 3vw;
+}
+
+#newFileWindowButton {
     font-size: 2.7em;
     color: #eeab7e;
     border: 3px solid black;
@@ -147,6 +158,80 @@ textarea{
     margin-left: 3vw;
     margin-top: 3vh;
 }
+.newFileWindow {
+    z-index: 1000;
+    position: fixed;
+    margin-top: 15vh;
+    margin-left: 34vw;
+    width: 32vw;
+    height: 65vh;
+    background-color: #eeab7e;
+    border: 2px solid black;
+}
+.hidden {
+    display: none;
+}
+
+.blur {
+    filter:blur(4px);
+}
+.disabled {
+    pointer-events: none;
+    height: 100%;
+    overflow-y: hidden;
+}
+#newFileForm {
+    margin-top: 3vh;
+    margin-left: 3vw;
+}
+.newFileWindow label {
+    font-size: 1.5em;
+}
+.newFileWindow h5{
+    margin-top: 5vh;
+    margin-left:3vw;
+    font-size: 2em;
+    margin-bottom: 3vh;
+}
+.newFileWindow input {
+    margin-top:2vh ;
+}
+#fileTypeSelector {
+    margin-bottom: 2.5vh;
+    margin-top: 2vh;
+    font-size: 1.3em;
+    background-color: #d6d7d7;
+    width: 5vw;
+}
+#newFileInput {
+    margin-bottom: 2.5vh;
+    width: 10vw;
+}
+input[type='text'] {
+    font-size: 1.3em;
+}
+input[type='file'] {
+    font-size: 1.3em;
+    margin-top: 1vh;
+}
+.newFileWindow button {
+    margin-right: 2.5vw;
+    margin-top: 2vw;
+    font-size: 1.5em;
+    background-color: #d6d7d7;
+    border: 1px solid black;
+    border-radius: 7%;
+    width: 8vw;
+}
+#saveButton {
+    background-color: cornflowerblue;
+}
+#secondFormHeading{
+    margin-left: 0;
+    margin-top: 3vh;
+}
+
+
 
 
 
