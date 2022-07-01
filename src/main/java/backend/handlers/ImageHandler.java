@@ -7,6 +7,6 @@ import java.io.*;
 public class ImageHandler extends Handler{
     @Override
     public byte[] getResponseBytes(Request request) throws IOException {
-        return new FileInputStream("./resources/"+request.getPath()).readAllBytes();
+        return new FileInputStream(request.getPath()).readAllBytes();
     }
 }

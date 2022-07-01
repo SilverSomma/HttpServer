@@ -151,7 +151,7 @@ function isValidName(name,type) {
 }
 function postFileFromNameInput(name, type) {
     const path = sessionStorage.getItem("path");
-    sessionStorage.setItem("path", name + "/")
+    sessionStorage.setItem("path", path + name + "/")
     postRequest("http://localhost:8080/newprojectfile?path=." + path+name +"&"+"type="+type, "text", (err, data) => {
         if (err != null) {
             console.log(err);

@@ -66,9 +66,7 @@ public class Request {
             pathEnd = firstRow.indexOf(" ", pathBeginning);
         }
         String requestPath = firstRow.substring(pathBeginning, pathEnd);
-        if (requestPath.contains("/") && !(requestPath.contains("./"))) {
-            return requestPath.substring(requestPath.lastIndexOf("/"));
-        }
+
         return requestPath;
     }
 

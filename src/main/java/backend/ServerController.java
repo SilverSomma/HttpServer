@@ -1,11 +1,11 @@
 package backend;
 
+import backend.handlers.FileHandler;
 import backend.handlers.FrontEndFileHandler;
 import backend.handlers.ImageHandler;
 import backend.handlers.JsonHandler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ServerController {
@@ -21,7 +21,8 @@ public class ServerController {
             return new JsonHandler().getResponseBytes(request);
         } else if (request.isFrontEndFile()) {
             return new FrontEndFileHandler().getResponseBytes(request);
+        } else {
+            return new FileHandler().getResponseBytes(request);
         }
-        return "CODE 404 PAGE NOT FOUND".getBytes(StandardCharsets.UTF_8);
     }
 }
