@@ -93,7 +93,7 @@ function displayProjectFiles(response, type) {
     }
 }
 
-function browseBack() {
+async function browseBack() {
     var path = sessionStorage.getItem("path");
     var removeLastSlash = path.substring(0, path.lastIndexOf("/"));
     var newPath = removeLastSlash.substring(0, removeLastSlash.lastIndexOf("/"));
@@ -118,21 +118,69 @@ function toggleNewFileWindow() {
 }
 
 
+
+
 function postFile() {
     const fileTypeInput = document.querySelector("select").value;
-    const fileNameInput = document.querySelector("input").value;
+    const fileNameTextInput = document.querySelector("input[type='text']").value;
+    const fileNameFileInput = document.querySelector("input[type='file']").value;
     console.log(fileTypeInput);
-    console.log(fileNameInput);
-    if (!isValidFilePostRequest(fileNameInput)) {
-        alert("Midagi valesti")
+    console.log(fileNameTextInput);
+    console.log(fileNameFileInput);
+    if (fileNameFileInput) {
+        // Fail arvutist...
+        // var fileBytes =  binaryString;
+        // console.log(fileBytes);
+    } else {
+        // Fail ise loodud...
+        if (isValidName(fileNameTextInput,fileTypeInput)) {
+            postFileFromNameInput(fileNameTextInput, fileTypeInput);
+            toggleNewFileWindow();
+            browseBack();
+        }
     }
 }
 
-function isValidFilePostRequest(fileTypeInput, fileNameInput) {
-    const validFileExtensions = [".jpg",".png",".ico", ""]
-    if (fileNameInput.includes()) {
 
+function isValidName(name,type) {
+    if (type === "File") {
+        return isValidFileName(name);
+    } else {
+        return isValidFolderName(name);
     }
+}
+function postFileFromNameInput(name, type) {
+    const path = sessionStorage.getItem("path");
+    sessionStorage.setItem("path", name + "/")
+    postRequest("http://localhost:8080/newprojectfile?path=." + path+name +"&"+"type="+type, "text", (err, data) => {
+        if (err != null) {
+            console.log(err);
+        } else {
+           alert("File created!")
+        }
+    });
+}
 
+
+function isValidFileName(fileName) {
+    const validFileExtensions = [".jpg",".png",".ico",".jpeg",".java",".css",".js", ".html", ".pdf",".txt"]
+    if(fileName.length<5){
+        alert("Type a valid file name!");
+        return false;
+    }
+    for (let i = 0; i < validFileExtensions.length; i++) {
+        if (fileName.includes(validFileExtensions[i])) {
+            return true;
+        }
+    }
+    alert("Type a valid file extension!");
     return false;
+}
+function isValidFolderName(fileName) {
+    if (fileName.length > 0 && (fileName.includes("."))) {
+        alert("Type a valid folder name!");
+        return false;
+    } else {
+        return true;
+    }
 }

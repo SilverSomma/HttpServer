@@ -1,17 +1,12 @@
 package backend;
 
-import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import static backend.ServerController.controller;
-import static backend.ServerService.*;
 
 
 public class HttpServer {
@@ -26,14 +21,18 @@ public class HttpServer {
         while (true) {
             try (Socket socket = server.accept()) {
                 InputStream rawRequestData = socket.getInputStream();
-                String requestPath = getRequestPath(rawRequestData);
-                Map<String,String> params = getParams(requestPath);
-                String filePath = controller(requestPath, params);
-                byte[] fileBytes = getHtmlBytes(filePath);
-                socket.getOutputStream().write(CODE200);
-                socket.getOutputStream().write(fileBytes);
-            } catch (ParseException e) {
-                e.printStackTrace();
+                Request request = new Request(rawRequestData);
+                System.out.println(request.getPath());
+                byte[] responseContent = controller(request);
+                if (responseContent.length != 0) {
+                    socket.getOutputStream().write(CODE200);
+                    socket.getOutputStream().write(responseContent);
+                } else {
+                    socket.getOutputStream().write(CODE200);
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+
             }
         }
     }

@@ -14,7 +14,7 @@
 <body onload=getFolderList("/");>
 <div class="newFileWindow hidden">
     <h5>Create new file.</h5>
-    <form action="" id="newFileForm">
+    <form action="" enctype="multipart/form-data" id="newFileForm">
     <label for="fileTypeSelector"> Choose type...</label>
         <br>
     <select name = "fileTypeSelector" id="fileTypeSelector">
@@ -29,7 +29,7 @@
         <h5 id="secondFormHeading">Or choose file from computer...</h5>
        <input type="file">
         <br>
-        <button type="button" onclick="toggleNewFileWindow()">Back</button><button onclick=postFile() id="saveButton">Save</button>
+        <button type="button" onclick="toggleNewFileWindow()">Back</button><button type="button" onclick=postFile() id="saveButton">Save</button>
     </form>
 </div>
 <div class="mainDiv">
