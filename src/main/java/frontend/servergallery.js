@@ -8,15 +8,8 @@ function newHtmlImage(names) {
 }
 
 function getImagesNameList() {
-    let response = {};
-    getRequest("http://localhost:8080/getpicturelist.json", "json", (err, data) => {
-        if (err != null) {
-            console.log(err);
-        } else {
-            response = `${data}`
-        }
-        const names = response.split(",");
-        newHtmlImage(names)
-
-    });
+    getRequestJson("http://localhost:8080/getpicturelist.json", {})
+        .then(data=>{
+            newHtmlImage(data);
+        })
 }

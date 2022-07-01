@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,9 +66,8 @@ public class Request {
         } else {
             pathEnd = firstRow.indexOf(" ", pathBeginning);
         }
-        String requestPath = firstRow.substring(pathBeginning, pathEnd);
 
-        return requestPath;
+        return firstRow.substring(pathBeginning, pathEnd);
     }
 
     private Map<String, String> requestParams(String requestFirstRow) {
@@ -77,7 +77,8 @@ public class Request {
         }
         Map<String, String> params = new HashMap<>();
         int paramsStartIndex = requestFirstRow.indexOf("?");
-        String paramsString = requestFirstRow.substring(paramsStartIndex + 1);
+        byte[] paramsStringBytes = requestFirstRow.substring(paramsStartIndex + 1).getBytes();
+        String paramsString = new String(paramsStringBytes,StandardCharsets.ISO_8859_1);
         String[] pathVariables = paramsString.split("&");
         for (String variable : pathVariables) {
             String[] keyAndValue = variable.split("=");

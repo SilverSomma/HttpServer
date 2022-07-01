@@ -1,30 +1,39 @@
 function getFolderList(path) {
     sessionStorage.setItem("path", path + "/")
-    getRequest("http://localhost:8080/getprojectfiles?path=." + path, "json", (err, data) => {
-        if (err != null) {
-            console.log(err);
-        } else {
-            let response = `${data}`
-            const fileNames = response.split(",")
+    getRequestJson('http://localhost:8080/getprojectfiles?path=.' + path, {})
+        .then(data => {
+            // let response = data.toString();
+            const fileNames = data.toString().split(",");
             displayProjectFiles(fileNames, "folder");
-        }
-    });
+        });
 }
 
 function getFileContent(path) {
     sessionStorage.setItem("path", path + "/")
-    getRequest("http://localhost:8080/getprojectfiles?path=." + path, "text", (err, data) => {
-        if (err != null) {
-            console.log(err);
-        } else {
-            let response = `${data}`;
+    getRequestText('http://localhost:8080/getprojectfiles?path=.' + path, {})
+        .then(data => {
+            let response = data;
+            console.log(response);
             if (isImage(path)) {
                 displayProjectFiles(response, "image");
             } else {
                 displayProjectFiles(response, "file");
             }
-        }
-    });
+        });
+
+    // sessionStorage.setItem("path", path + "/")
+    // getRequest("http://localhost:8080/getprojectfiles?path=." + path, "text", (err, data) => {
+    //     if (err != null) {
+    //         console.log(err);
+    //     } else {
+    //         let response = `${data}`;
+    //         if (isImage(path)) {
+    //             displayProjectFiles(response, "image");
+    //         } else {
+    //             displayProjectFiles(response, "file");
+    //         }
+    //     }
+    // });
 }
 
 function displayFolderList(response) {
@@ -103,6 +112,7 @@ async function browseBack() {
 function isImage(path) {
     return (path.includes(".jpg")) || (path.includes(".jpeg")) || (path.includes(".png")) || (path.includes(".ico"));
 }
+
 function toggleNewFileWindow() {
     let window = document.querySelector(".newFileWindow");
     let main = document.querySelector(".mainDiv");
@@ -110,14 +120,12 @@ function toggleNewFileWindow() {
         window.classList.remove("hidden");
         main.classList.add("blur");
         main.classList.add("disabled");
-    }else{
+    } else {
         window.classList.add("hidden");
         main.classList.remove("blur");
         main.classList.remove("disabled");
     }
 }
-
-
 
 
 function postFile() {
@@ -133,7 +141,7 @@ function postFile() {
         // console.log(fileBytes);
     } else {
         // Fail ise loodud...
-        if (isValidName(fileNameTextInput,fileTypeInput)) {
+        if (isValidName(fileNameTextInput, fileTypeInput)) {
             postFileFromNameInput(fileNameTextInput, fileTypeInput);
             toggleNewFileWindow();
             browseBack();
@@ -142,29 +150,24 @@ function postFile() {
 }
 
 
-function isValidName(name,type) {
+function isValidName(name, type) {
     if (type === "File") {
         return isValidFileName(name);
     } else {
         return isValidFolderName(name);
     }
 }
+
 function postFileFromNameInput(name, type) {
     const path = sessionStorage.getItem("path");
-    sessionStorage.setItem("path", path + name + "/")
-    postRequest("http://localhost:8080/newprojectfile?path=." + path+name +"&"+"type="+type, "text", (err, data) => {
-        if (err != null) {
-            console.log(err);
-        } else {
-           alert("File created!")
-        }
-    });
+    postRequest("http://localhost:8080/newprojectfile?path=." + path + name + "&" + "type=" + type, {})
+        .then(alert("File created!"));
 }
 
 
 function isValidFileName(fileName) {
-    const validFileExtensions = [".jpg",".png",".ico",".jpeg",".java",".css",".js", ".html", ".pdf",".txt"]
-    if(fileName.length<5){
+    const validFileExtensions = [".jpg", ".png", ".ico", ".jpeg", ".java", ".css", ".js", ".html", ".pdf", ".txt"]
+    if (fileName.length < 5) {
         alert("Type a valid file name!");
         return false;
     }
@@ -176,6 +179,7 @@ function isValidFileName(fileName) {
     alert("Type a valid file extension!");
     return false;
 }
+
 function isValidFolderName(fileName) {
     if (fileName.length > 0 && (fileName.includes("."))) {
         alert("Type a valid folder name!");
