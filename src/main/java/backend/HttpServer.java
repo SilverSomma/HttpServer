@@ -23,16 +23,10 @@ public class HttpServer {
                 InputStream rawRequestData = socket.getInputStream();
                 Request request = new Request(rawRequestData);
                 System.out.println(request.getPath());
-                byte[] responseContent = controller(request);
-                if (responseContent.length != 0) {
-                    socket.getOutputStream().write(CODE200);
-                    socket.getOutputStream().write(responseContent);
-                } else {
-                    socket.getOutputStream().write(CODE200);
-                }
+                Response response = controller(request);
+                response.writeResponse(socket, response);
             } catch (Exception e) {
                 System.out.println(e);
-
             }
         }
     }
