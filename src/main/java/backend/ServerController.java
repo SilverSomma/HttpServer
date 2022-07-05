@@ -14,15 +14,15 @@ public class ServerController {
     protected static Response controller(Request request) throws IOException {
         Map <String,String> params =  request.getParams();
         if (params != null) {
-            return new Response(new JsonHandler().getResponseBytes(request));
+            return new JsonHandler().getResponseBytes(request);
         } else if(request.isImage()) {
-            return new Response(new ImageHandler().getResponseBytes(request));
+            return new ImageHandler().getResponseBytes(request);
         } else if (request.isJson()) {
-            return new Response(new JsonHandler().getResponseBytes(request)) ;
+            return new JsonHandler().getResponseBytes(request) ;
         } else if (request.isFrontEndFile()) {
-            return new Response(new FrontEndFileHandler().getResponseBytes(request)) ;
+            return new FrontEndFileHandler().getResponseBytes(request);
         } else {
-            return new Response(new FileHandler().getResponseBytes(request));
+            return new FileHandler().getResponseBytes(request);
         }
     }
 }

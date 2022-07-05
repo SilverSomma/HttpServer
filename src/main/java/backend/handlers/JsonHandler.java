@@ -1,6 +1,8 @@
 package backend.handlers;
 
+import backend.Authorization;
 import backend.Request;
+import backend.Response;
 import backend.salarycalculatorjava.GrossSalary;
 import backend.salarycalculatorjava.SalaryCalculatorService;
 import backend.salarycalculatorjava.SalaryInformationResponse;
@@ -18,8 +20,12 @@ import java.util.Objects;
 
 public class JsonHandler extends Handler {
 
+
+    public static final String CODE404 = "HTTP/1.1 404 NOT FOUND";
+    public static final String CODE401 = "HTTP/1.1 401 Unauthorized";
+
     @Override
-    public byte[] getResponseBytes(Request request) throws IOException {
+    public Response getResponseBytes(Request request) throws IOException {
         if (Objects.equals(request.getPath(), "salarycalculator")) {
             return handleSalaryCalculator(request);
         } else if (Objects.equals(request.getPath(), "getprojectfiles")) {
@@ -29,7 +35,7 @@ public class JsonHandler extends Handler {
         } else if (Objects.equals(request.getPath(),"getpicturelist.json")) {
             return createPictureListJson(request);
         }
-        return new byte[0];
+        return new Response(CODE404,new byte[0]);
     }
 
     private void createNewFile(Request request) throws IOException {
@@ -40,45 +46,49 @@ public class JsonHandler extends Handler {
         }
     }
 
-    private byte[] handleSalaryCalculator(Request request) throws JsonProcessingException {
+    private Response handleSalaryCalculator(Request request) throws JsonProcessingException {
         String salary = request.getParams().get("salary");
         SalaryInformationResponse response = SalaryCalculatorService.getSalaryInformation(new GrossSalary(new BigDecimal(salary)));
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(response);
-        return json.getBytes(StandardCharsets.UTF_8);
+        return new Response(json.getBytes(StandardCharsets.UTF_8));
     }
 
-    private static byte[] getProjectFiles(Request request) throws IOException {
-        String path = request.getParams().get("path");
-        if (isFile(path)) {
-            if (isImage(path)) {
-                return getImageBase64Bytes(path);
+    private static Response getProjectFiles(Request request) throws IOException {
+        if (Authorization.isValidKey(request)) {
+
+            String path = request.getParams().get("path");
+            if (isFile(path)) {
+                if (isImage(path)) {
+                    return getImageBase64Bytes(path);
+                } else {
+                    return getFileBytes(path);
+                }
             } else {
-                return getFileBytes(path);
+                return getDirectoryListBytes(path);
             }
-        } else {
-            return getDirectoryListBytes(path);
         }
+        return new Response(CODE401,new byte[0],true);
     }
 
-    private static byte[] getImageBase64Bytes(String path) throws IOException {
+    private static Response getImageBase64Bytes(String path) throws IOException {
         File file = new File(path);
         byte[] bytes = new FileInputStream(file).readAllBytes();
-        return Base64.getEncoder().encode(bytes);
+        return new Response(Base64.getEncoder().encode(bytes));
     }
 
-    private static byte[] getFileBytes(String path) throws IOException {
+    private static Response getFileBytes(String path) throws IOException {
         File file = new File(path);
         InputStream in = new FileInputStream(file);
-        return in.readAllBytes();
+        return new Response(in.readAllBytes());
     }
 
-    private static byte[] getDirectoryListBytes(String path) throws IOException {
+    private static Response getDirectoryListBytes(String path) throws IOException {
         FilenameFilter filenameFilter = getFileNameFilter();
         File[] fileArr = new File(path).listFiles(filenameFilter);
         String[] files = sortFilesByDirectory(fileArr);
         String json = new ObjectMapper().writeValueAsString(files);
-        return json.getBytes(StandardCharsets.UTF_8);
+        return new Response(json.getBytes(StandardCharsets.UTF_8));
     }
 
     private static FilenameFilter getFileNameFilter() {
@@ -100,11 +110,11 @@ public class JsonHandler extends Handler {
     private static boolean isImage(String path) {
         return path.contains(".jpg") || path.contains(".ico") || path.contains(".png") || path.contains(".jpeg");
     }
-    private static byte[] createPictureListJson(Request request) throws IOException {
+    private static Response createPictureListJson(Request request) throws IOException {
         String[] names = new File("./resources").list();
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(names);
-        return json.getBytes(StandardCharsets.UTF_8);
+        return new Response(json.getBytes(StandardCharsets.UTF_8));
     }
 
     private static String[] sortFilesByDirectory(File[] files) {

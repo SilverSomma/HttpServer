@@ -1,12 +1,14 @@
 package backend.handlers;
 
 import backend.Request;
+import backend.Response;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 
-public class ImageHandler extends Handler{
+public class ImageHandler extends Handler {
     @Override
-    public byte[] getResponseBytes(Request request) throws IOException {
-        return new FileInputStream(request.getPath()).readAllBytes();
+    public Response getResponseBytes(Request request) throws IOException {
+        return new Response(new FileInputStream("./"+request.getPath()).readAllBytes());
     }
 }

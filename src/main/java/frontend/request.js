@@ -24,6 +24,7 @@ async function getRequestJson(url = '', data = {}) {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
     });
+
     return response.json();
 }
 async function getRequestText(url = '', data = {}) {
@@ -33,7 +34,7 @@ async function getRequestText(url = '', data = {}) {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-            'Content-Type': 'text'
+            'Content-Type': 'text/html'
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',

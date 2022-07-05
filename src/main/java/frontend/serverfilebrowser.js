@@ -5,7 +5,7 @@ function getFolderList(path) {
             // let response = data.toString();
             const fileNames = data.toString().split(",");
             displayProjectFiles(fileNames, "folder");
-        });
+        })
 }
 
 function getFileContent(path) {

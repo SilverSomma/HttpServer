@@ -1,6 +1,7 @@
 package backend.handlers;
 
 import backend.Request;
+import backend.Response;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,14 +9,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class FileHandler extends Handler {
+    public static final String CODE404 = "HTTP/1.1 404 NOT FOUND";
+
     @Override
-    public byte[] getResponseBytes(Request request) throws IOException {
+    public Response getResponseBytes(Request request) throws IOException {
 
         if (new File(request.getPath()).exists()) {
             File file = new File(request.getPath());
-            return new FileInputStream(file).readAllBytes();
+            return new Response(new FileInputStream(file).readAllBytes());
         } else {
-            return "HTTP/1.1 404 NOT FOUND \r\n\r\n".getBytes(StandardCharsets.UTF_8);
+            return new Response(CODE404, new byte[0]);
         }
     }
 }
