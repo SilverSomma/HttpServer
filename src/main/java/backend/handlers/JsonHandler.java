@@ -34,8 +34,16 @@ public class JsonHandler extends Handler {
             createNewFile(request);
         } else if (Objects.equals(request.getPath(),"getpicturelist.json")) {
             return createPictureListJson(request);
+        }else if (Objects.equals(request.getPath(),"saveprojectfile")) {
+            return saveFileChanges(request);
         }
         return new Response(CODE404,new byte[0]);
+    }
+
+    private Response saveFileChanges(Request request) throws IOException {
+        OutputStream out = new FileOutputStream(request.getParams().get("path"));
+        out.write(request.getBody().getBytes(StandardCharsets.UTF_8));
+        return new Response(new byte[0]);
     }
 
     private void createNewFile(Request request) throws IOException {
@@ -56,7 +64,6 @@ public class JsonHandler extends Handler {
 
     private static Response getProjectFiles(Request request) throws IOException {
         if (Authorization.isValidKey(request)) {
-
             String path = request.getParams().get("path");
             if (isFile(path)) {
                 if (isImage(path)) {
@@ -94,7 +101,7 @@ public class JsonHandler extends Handler {
     private static FilenameFilter getFileNameFilter() {
         return (dir, name) -> {
             if (Objects.equals(dir, new File("./"))) {
-                return !Objects.equals(name, ".git") && !Objects.equals(name, ".idea") && !Objects.equals(name, "target");
+                return !Objects.equals(name, ".git") && !Objects.equals(name, ".idea") && !Objects.equals(name, "target") && !Objects.equals(name,"Authorization.txt");
             } else return true;
         };
     }

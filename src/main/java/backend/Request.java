@@ -15,6 +15,7 @@ public class Request {
     private final String extension;
     private final Map<String, String> params;
     private final Map<String, String> headers;
+    private final String body;
 
     public Request(InputStream in) throws IOException {
         String data = getData(in);
@@ -23,7 +24,26 @@ public class Request {
         this.path = requestPath(firstRow);
         this.extension = requestExtension(requestPath(firstRow));
         this.params = requestParams(firstRow);
-        this.headers = requestHeaders(data);
+        if (hasBody(data)) {
+            this.headers = requestHeaders(getHead(data));
+            this.body = getBody(data);
+        } else {
+            this.headers = requestHeaders(data);
+            this.body = "";
+        }
+    }
+
+    private boolean hasBody(String data) {
+        return !data.endsWith("\r\n\r\n");
+    }
+
+    private String getBody(String data) {
+       String[] dataStr = data.split("\r\n\r\n");
+       return dataStr[1];
+    }
+    private String getHead(String data) {
+        String[] dataStr = data.split("\r\n\r\n");
+        return dataStr[0];
     }
 
     public Map<String, String> getHeaders() {
@@ -52,7 +72,19 @@ public class Request {
             data.append((char) reader.read());
             if (data.toString().endsWith("\r\n\r\n")) break;
         }
+        int contentLength =  getRequestBodyLength(data.toString());
+        for (int i = 0; i < contentLength; i++) {
+            data.append((char) reader.read());
+        }
         return data.toString();
+    }
+
+    private int getRequestBodyLength(String data) {
+        Map<String,String> headers = requestHeaders(data);
+        if (headers.containsKey("Content-Length")) {
+            return Integer.valueOf(headers.get("Content-Length"));
+        }
+        return 0;
     }
 
 
@@ -139,5 +171,9 @@ public class Request {
             int dotPos = requestPath.indexOf(".");
             return requestPath.substring(dotPos);
         }
+    }
+
+    public String getBody() {
+        return body;
     }
 }

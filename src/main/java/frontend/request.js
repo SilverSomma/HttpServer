@@ -10,6 +10,18 @@ async function postRequest(url = '', data = {}) {
     });
     return response;
 }
+async function postTextarea(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST',
+        body: document.getElementById("files").querySelector("textarea").value,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    });
+    return response;
+}
 
 
 async function getRequestJson(url = '', data = {}) {

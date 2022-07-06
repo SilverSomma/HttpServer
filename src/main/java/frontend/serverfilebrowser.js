@@ -8,32 +8,36 @@ function getFolderList(path) {
         })
 }
 
+function toggleSaveButtonHidden() {
+   const btn = document.getElementById("saveContentButton");
+    if (btn.classList.contains("hidden")) {
+        btn.classList.remove("hidden");
+    } else {
+        btn.classList.add("hidden");
+    }
+}
+
+function toggleNewWindowButtonHidden() {
+    const btn = document.getElementById("newFileWindowButton");
+    if (btn.classList.contains("hidden")) {
+        btn.classList.remove("hidden");
+    } else {
+        btn.classList.add("hidden");
+    }
+}
+
 function getFileContent(path) {
     sessionStorage.setItem("path", path + "/")
     getRequestText('http://localhost:8080/getprojectfiles?path=.' + path, {})
         .then(data => {
             let response = data;
-            console.log(response);
             if (isImage(path)) {
                 displayProjectFiles(response, "image");
             } else {
                 displayProjectFiles(response, "file");
+                toggleSaveButtonHidden();
             }
         });
-
-    // sessionStorage.setItem("path", path + "/")
-    // getRequest("http://localhost:8080/getprojectfiles?path=." + path, "text", (err, data) => {
-    //     if (err != null) {
-    //         console.log(err);
-    //     } else {
-    //         let response = `${data}`;
-    //         if (isImage(path)) {
-    //             displayProjectFiles(response, "image");
-    //         } else {
-    //             displayProjectFiles(response, "file");
-    //         }
-    //     }
-    // });
 }
 
 function displayFolderList(response) {
@@ -59,6 +63,7 @@ function displayFolderList(response) {
 }
 
 function displayFileContent(response) {
+    toggleNewWindowButtonHidden();
     let p = document.createElement("textarea");
     p.textContent = response;
     p.spellcheck = false;
@@ -67,6 +72,7 @@ function displayFileContent(response) {
 
 function displayImage(response) {
     let img = new Image()
+    toggleNewWindowButtonHidden();
     img.src = 'data:image/png;base64,' + response;
     document.getElementById('files').appendChild(img);
 }
@@ -103,9 +109,17 @@ function displayProjectFiles(response, type) {
 }
 
 async function browseBack() {
+    const saveBtn = document.getElementById("saveContentButton");
+    const newFileBtn = document.getElementById("newFileWindowButton");
     var path = sessionStorage.getItem("path");
     var removeLastSlash = path.substring(0, path.lastIndexOf("/"));
     var newPath = removeLastSlash.substring(0, removeLastSlash.lastIndexOf("/"));
+    if (!saveBtn.classList.contains("hidden")) {
+        toggleSaveButtonHidden();
+    }
+    if (newFileBtn.classList.contains("hidden")) {
+        toggleNewWindowButtonHidden();
+    }
     getFolderList(newPath);
 }
 
@@ -132,13 +146,9 @@ function postFile() {
     const fileTypeInput = document.querySelector("select").value;
     const fileNameTextInput = document.querySelector("input[type='text']").value;
     const fileNameFileInput = document.querySelector("input[type='file']").value;
-    console.log(fileTypeInput);
-    console.log(fileNameTextInput);
-    console.log(fileNameFileInput);
     if (fileNameFileInput) {
         // Fail arvutist...
         // var fileBytes =  binaryString;
-        // console.log(fileBytes);
     } else {
         // Fail ise loodud...
         if (isValidName(fileNameTextInput, fileTypeInput)) {
@@ -187,4 +197,15 @@ function isValidFolderName(fileName) {
     } else {
         return true;
     }
+}
+
+function saveContent() {
+    const path = sessionStorage.getItem("path");
+    postTextarea("http://localhost:8080/saveprojectfile?path=." + path,{})
+        .then(response =>{
+            alert("File saved!")
+            browseBack();
+        })
+
+
 }
