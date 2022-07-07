@@ -152,17 +152,6 @@ public class Request {
         }
         return params;
     }
-//
-//    private String requestFirstRow(InputStream requestData) throws IOException {
-//        StringBuilder firstRow = new StringBuilder();
-//        Reader reader = new InputStreamReader(requestData);
-//        int c;
-//        while ((c = reader.read()) != -1) {
-//            firstRow.append((char) c);
-//            System.out.println(c);
-//        }
-//        return firstRow.toString();
-//    }
 
     private String requestExtension(String requestPath) {
         if (!requestPath.contains(".")) {

@@ -12,6 +12,17 @@ async function postRequest(url = '', data = {}) {
     });
     return response;
 }
+async function deleteRequest(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'DELETE',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    });
+    return response;
+}
 async function postTextarea(url = '', data = {}) {
     const response = await fetch(url, {
         method: 'POST',
@@ -44,7 +55,7 @@ async function getRequestJson(url = '', data = {}) {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',

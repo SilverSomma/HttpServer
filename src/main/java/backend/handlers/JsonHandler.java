@@ -36,8 +36,21 @@ public class JsonHandler extends Handler {
             return createPictureListJson(request);
         } else if (Objects.equals(request.getPath(), "saveprojectfile")) {
             return saveFileChanges(request);
+        }else if (Objects.equals(request.getPath(), "deleteprojectfile")) {
+            return deleteFile(request);
         }
         return new Response(CODE404, new byte[0]);
+    }
+
+    private Response deleteFile(Request request) {
+        String fileNameInput = request.getParams().get("path");
+        if (new File(fileNameInput).exists()) {
+            boolean isDeleted = new File (fileNameInput).delete();
+            if (isDeleted) {
+                return new Response(new byte[0]);
+            }
+        }
+        return new Response(CODE404,new byte[0]);
     }
 
     private Response saveFileChanges(Request request) throws IOException {
@@ -61,8 +74,8 @@ public class JsonHandler extends Handler {
             String[] strings = request.getBody().split(",");
             byte [] bytes = new byte[strings.length];
             for (int i = 0; i < strings.length; i++) {
-                Integer integer = Integer.valueOf(strings[i]);
-                bytes[i] = integer.byteValue();
+                int integer = Integer.parseInt(strings[i]);
+                bytes[i] = (byte) integer;
             }
             out.write(bytes);
             out.close();
@@ -96,15 +109,18 @@ public class JsonHandler extends Handler {
     }
 
     private static Response getImageBase64Bytes(String path) throws IOException {
-        File file = new File(path);
-        byte[] bytes = new FileInputStream(file).readAllBytes();
+        InputStream in = new FileInputStream(path);
+        byte[] bytes = in.readAllBytes();
+        in.close();
         return new Response(Base64.getEncoder().encode(bytes));
     }
 
     private static Response getFileBytes(String path) throws IOException {
         File file = new File(path);
         InputStream in = new FileInputStream(file);
-        return new Response(in.readAllBytes());
+        byte[] response = in.readAllBytes();
+        in.close();
+        return new Response(response);
     }
 
     private static Response getDirectoryListBytes(String path) throws IOException {

@@ -241,7 +241,15 @@ input[type='file'] {
     margin-top: 3vw;
 }
 
-
+#deleteContentButton {
+    font-size: 2.7em;
+    color: #ef4321;
+    border: 3px solid black;
+    border-radius: 10%;
+    padding:5px;
+    margin-left: 3vw;
+    margin-top: 3vw;
+}
 
 
 

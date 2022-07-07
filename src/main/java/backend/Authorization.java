@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+
 public class Authorization {
 
     public static String generateKey() throws IOException {

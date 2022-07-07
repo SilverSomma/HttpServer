@@ -56,6 +56,7 @@ public class Response {
         if (response.getContent() != null) {
             socket.getOutputStream().write(response.getContent());
         }
+        socket.close();
     }
 
     public String getDate() {

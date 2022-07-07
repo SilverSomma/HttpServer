@@ -36,6 +36,7 @@ function getFileContent(path) {
             } else {
                 displayProjectFiles(response, "file");
                 toggleSaveButtonHidden();
+                toggleDeleteButtonHidden();
             }
         });
 }
@@ -73,6 +74,7 @@ function displayFileContent(response) {
 function displayImage(response) {
     let img = new Image()
     toggleNewWindowButtonHidden();
+    toggleDeleteButtonHidden();
     img.src = 'data:image/png;base64,' + response;
     document.getElementById('files').appendChild(img);
 }
@@ -111,9 +113,13 @@ function displayProjectFiles(response, type) {
 async function browseBack() {
     const saveBtn = document.getElementById("saveContentButton");
     const newFileBtn = document.getElementById("newFileWindowButton");
+    const deleteBtn = document.getElementById("deleteContentButton");
     var path = sessionStorage.getItem("path");
     var removeLastSlash = path.substring(0, path.lastIndexOf("/"));
     var newPath = removeLastSlash.substring(0, removeLastSlash.lastIndexOf("/"));
+    if (!deleteBtn.classList.contains("hidden")) {
+        toggleDeleteButtonHidden();
+    }
     if (!saveBtn.classList.contains("hidden")) {
         toggleSaveButtonHidden();
     }
@@ -147,16 +153,15 @@ function postFile() {
     const fileNameTextInput = document.querySelector("input[type='text']").value;
     const fileNameFileInput = document.querySelector("input[type='file']").value.toString().substring(12);
     if (fileNameTextInput === "") {
+        sessionStorage.setItem("path",sessionStorage.getItem("path")+fileNameFileInput);
         postFileFromFileInput(fileNameFileInput, "File");
         toggleNewFileWindow();
         browseBack();
-    } else {
-        // Fail ise loodud...
-        if (isValidName(fileNameTextInput, fileTypeInput)) {
-            postFileFromNameInput(fileNameTextInput, fileTypeInput);
-            toggleNewFileWindow();
-            browseBack();
-        }
+    } else if (isValidName(fileNameTextInput, fileTypeInput)) {
+        sessionStorage.setItem("path",sessionStorage.getItem("path")+fileNameTextInput);
+        postFileFromNameInput(fileNameTextInput, fileTypeInput);
+        toggleNewFileWindow();
+        browseBack();
     }
 }
 
@@ -211,9 +216,26 @@ function saveContent() {
     const path = sessionStorage.getItem("path");
     postTextarea("http://localhost:8080/saveprojectfile?path=." + path,{})
         .then(response =>{
-            browseBack();
             alert("File saved!")
         })
+}
+
+function toggleDeleteButtonHidden() {
+    const btn = document.getElementById("deleteContentButton");
+    if (btn.classList.contains("hidden")) {
+        btn.classList.remove("hidden");
+    } else {
+        btn.classList.add("hidden");
+    }
+}
+
+function deleteContent() {
+    const path = sessionStorage.getItem("path");
+deleteRequest("http://localhost:8080/deleteprojectfile?path=." + path,{})
+    .then(response =>{
+        browseBack();
+        alert("File deleted!")
+    })
 }
 
 
