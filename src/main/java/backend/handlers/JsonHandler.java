@@ -31,13 +31,13 @@ public class JsonHandler extends Handler {
         } else if (Objects.equals(request.getPath(), "getprojectfiles")) {
             return getProjectFiles(request);
         } else if (Objects.equals(request.getPath(), "newprojectfile")) {
-            createNewFile(request);
-        } else if (Objects.equals(request.getPath(),"getpicturelist.json")) {
+            return createNewFile(request);
+        } else if (Objects.equals(request.getPath(), "getpicturelist.json")) {
             return createPictureListJson(request);
-        }else if (Objects.equals(request.getPath(),"saveprojectfile")) {
+        } else if (Objects.equals(request.getPath(), "saveprojectfile")) {
             return saveFileChanges(request);
         }
-        return new Response(CODE404,new byte[0]);
+        return new Response(CODE404, new byte[0]);
     }
 
     private Response saveFileChanges(Request request) throws IOException {
@@ -46,12 +46,29 @@ public class JsonHandler extends Handler {
         return new Response(new byte[0]);
     }
 
-    private void createNewFile(Request request) throws IOException {
-        if (Objects.equals(request.getParams().get("type"), "File")) {
+    private Response createNewFile(Request request) throws IOException {
+        if (Objects.equals(request.getBody(), "")) {
+            if (Objects.equals(request.getParams().get("type"), "File")) {
+                new File(request.getParams().get("path")).createNewFile();
+                return new Response(new byte[0]);
+            } else {
+                new File(request.getParams().get("path")).mkdirs();
+                return new Response(new byte[0]);
+            }
+        }else{
             new File(request.getParams().get("path")).createNewFile();
-        } else {
-            new File(request.getParams().get("path")).mkdirs();
+            OutputStream out = new FileOutputStream(request.getParams().get("path"));
+            String[] strings = request.getBody().split(",");
+            byte [] bytes = new byte[strings.length];
+            for (int i = 0; i < strings.length; i++) {
+                Integer integer = Integer.valueOf(strings[i]);
+                bytes[i] = integer.byteValue();
+            }
+            out.write(bytes);
+            out.close();
+            return new Response(new byte[0]);
         }
+
     }
 
     private Response handleSalaryCalculator(Request request) throws JsonProcessingException {
@@ -75,7 +92,7 @@ public class JsonHandler extends Handler {
                 return getDirectoryListBytes(path);
             }
         }
-        return new Response(CODE401,new byte[0],true);
+        return new Response(CODE401, new byte[0], true);
     }
 
     private static Response getImageBase64Bytes(String path) throws IOException {
@@ -101,7 +118,7 @@ public class JsonHandler extends Handler {
     private static FilenameFilter getFileNameFilter() {
         return (dir, name) -> {
             if (Objects.equals(dir, new File("./"))) {
-                return !Objects.equals(name, ".git") && !Objects.equals(name, ".idea") && !Objects.equals(name, "target") && !Objects.equals(name,"Authorization.txt");
+                return !Objects.equals(name, ".git") && !Objects.equals(name, ".idea") && !Objects.equals(name, "target") && !Objects.equals(name, "Authorization.txt");
             } else return true;
         };
     }
@@ -117,6 +134,7 @@ public class JsonHandler extends Handler {
     private static boolean isImage(String path) {
         return path.contains(".jpg") || path.contains(".ico") || path.contains(".png") || path.contains(".jpeg");
     }
+
     private static Response createPictureListJson(Request request) throws IOException {
         String[] names = new File("./resources").list();
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

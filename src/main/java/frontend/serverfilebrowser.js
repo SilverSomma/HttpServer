@@ -131,6 +131,7 @@ function toggleNewFileWindow() {
     let window = document.querySelector(".newFileWindow");
     let main = document.querySelector(".mainDiv");
     if (window.classList.contains("hidden")) {
+        readFileInput();
         window.classList.remove("hidden");
         main.classList.add("blur");
         main.classList.add("disabled");
@@ -141,14 +142,14 @@ function toggleNewFileWindow() {
     }
 }
 
-
 function postFile() {
     const fileTypeInput = document.querySelector("select").value;
     const fileNameTextInput = document.querySelector("input[type='text']").value;
-    const fileNameFileInput = document.querySelector("input[type='file']").value;
-    if (fileNameFileInput) {
-        // Fail arvutist...
-        // var fileBytes =  binaryString;
+    const fileNameFileInput = document.querySelector("input[type='file']").value.toString().substring(12);
+    if (fileNameTextInput === "") {
+        postFileFromFileInput(fileNameFileInput, "File");
+        toggleNewFileWindow();
+        browseBack();
     } else {
         // Fail ise loodud...
         if (isValidName(fileNameTextInput, fileTypeInput)) {
@@ -159,6 +160,11 @@ function postFile() {
     }
 }
 
+function postFileFromFileInput(name, type) {
+    const path = sessionStorage.getItem("path");
+    postRequestFromFileInput("http://localhost:8080/newprojectfile?path=." + path + name + "&" + "type=" + type, {})
+        .then(alert("File created!"));
+}
 
 function isValidName(name, type) {
     if (type === "File") {
@@ -168,11 +174,13 @@ function isValidName(name, type) {
     }
 }
 
+
 function postFileFromNameInput(name, type) {
     const path = sessionStorage.getItem("path");
-    postRequest("http://localhost:8080/newprojectfile?path=." + path + name + "&" + "type=" + type, {})
+    postRequest("http://localhost:8080/newprojectfile?path=." + path+ name + "&" + "type=" + type, {})
         .then(alert("File created!"));
 }
+
 
 
 function isValidFileName(fileName) {
@@ -203,9 +211,9 @@ function saveContent() {
     const path = sessionStorage.getItem("path");
     postTextarea("http://localhost:8080/saveprojectfile?path=." + path,{})
         .then(response =>{
-            alert("File saved!")
             browseBack();
+            alert("File saved!")
         })
-
-
 }
+
+

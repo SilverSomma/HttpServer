@@ -1,3 +1,5 @@
+this.fileByteArray = [];
+
 
 async function postRequest(url = '', data = {}) {
     const response = await fetch(url, {
@@ -22,7 +24,18 @@ async function postTextarea(url = '', data = {}) {
     });
     return response;
 }
-
+async function postRequestFromFileInput(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST',
+        body: this.fileByteArray,
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    });
+    return response;
+}
 
 async function getRequestJson(url = '', data = {}) {
     const response = await fetch(url, {
@@ -52,4 +65,24 @@ async function getRequestText(url = '', data = {}) {
         referrerPolicy: 'no-referrer',
     });
     return response.text();
+}
+function readFileInput() {
+    const input = document.querySelector("input[type='file']");
+    const reader = new FileReader();
+    const fileByteArray = [];
+
+    input.addEventListener('change', (e) => {
+        reader.readAsArrayBuffer(e.target.files[0]);
+        reader.onloadend = (evt) => {
+            if (evt.target.readyState === FileReader.DONE) {
+                const arrayBuffer = evt.target.result,
+                    array = new Uint8Array(arrayBuffer);
+                for (const a of array) {
+                    fileByteArray.push(a);
+                }
+                console.log(fileByteArray);
+                this.fileByteArray = fileByteArray;
+            }
+        }
+    })
 }
