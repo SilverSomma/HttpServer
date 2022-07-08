@@ -91,7 +91,6 @@ function readFileInput() {
                 for (const a of array) {
                     fileByteArray.push(a);
                 }
-                console.log(fileByteArray);
                 this.fileByteArray = fileByteArray;
             }
         }

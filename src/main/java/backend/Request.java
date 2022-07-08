@@ -1,5 +1,8 @@
 package backend;
 
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,14 +11,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
+@Value
 public class Request {
 
-    private final String method;
-    private final String path;
-    private final String extension;
-    private final Map<String, String> params;
-    private final Map<String, String> headers;
-    private final String body;
+    String method;
+    String path;
+    String extension;
+    Map<String, String> params;
+    Map<String, String> headers;
+    String body;
 
     public Request(InputStream in) throws IOException {
         String data = getData(in);
@@ -31,6 +36,7 @@ public class Request {
             this.headers = requestHeaders(data);
             this.body = "";
         }
+        log.info("{} request made on {}",this.method, this.path);
     }
 
     private boolean hasBody(String data) {
@@ -38,29 +44,27 @@ public class Request {
     }
 
     private String getBody(String data) {
-       String[] dataStr = data.split("\r\n\r\n");
-       return dataStr[1];
+        String[] dataStr = data.split("\r\n\r\n");
+        return dataStr[1];
     }
+
     private String getHead(String data) {
         String[] dataStr = data.split("\r\n\r\n");
         return dataStr[0];
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
 
     private String getFirstRow(String rawData) {
         String[] rows = rawData.split("\r\n");
         return rows[0];
     }
 
-    private Map<String,String> requestHeaders(String data) {
-        Map<String,String> headers = new HashMap<>();
+    private Map<String, String> requestHeaders(String data) {
+        Map<String, String> headers = new HashMap<>();
         String[] rows = data.split("\r\n");
         for (int i = 1; i < rows.length; i++) {
-           String [] header =  rows[i].split(":");
-            headers.put(header[0],header[1].substring(1));
+            String[] header = rows[i].split(":");
+            headers.put(header[0], header[1].substring(1));
         }
         return headers;
     }
@@ -72,7 +76,7 @@ public class Request {
             data.append((char) reader.read());
             if (data.toString().endsWith("\r\n\r\n")) break;
         }
-        int contentLength =  getRequestBodyLength(data.toString());
+        int contentLength = getRequestBodyLength(data.toString());
         for (int i = 0; i < contentLength; i++) {
             data.append((char) reader.read());
         }
@@ -80,7 +84,7 @@ public class Request {
     }
 
     private int getRequestBodyLength(String data) {
-        Map<String,String> headers = requestHeaders(data);
+        Map<String, String> headers = requestHeaders(data);
         if (headers.containsKey("Content-Length")) {
             return Integer.valueOf(headers.get("Content-Length"));
         }
@@ -103,29 +107,13 @@ public class Request {
         return ex.contains(".js") || ex.contains(".css") || ex.equals("");
     }
 
-    public String getExtension() {
-        return extension;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
     private String requestMethod(String firstRow) {
         int methodEnd = firstRow.indexOf(" ");
         return firstRow.substring(0, methodEnd);
     }
 
     private String requestPath(String firstRow) {
-        int pathBeginning = firstRow.indexOf("/")+1;
+        int pathBeginning = firstRow.indexOf("/") + 1;
         int pathEnd = 0;
         if (firstRow.contains("?")) {
             pathEnd = firstRow.indexOf("?", pathBeginning);
@@ -160,9 +148,5 @@ public class Request {
             int dotPos = requestPath.indexOf(".");
             return requestPath.substring(dotPos);
         }
-    }
-
-    public String getBody() {
-        return body;
     }
 }

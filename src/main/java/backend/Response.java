@@ -1,17 +1,23 @@
 package backend;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Objects;
 
+@Slf4j
+@Value
 public class Response {
+    public static final String CODE200 = "HTTP/1.1 200 OK";
     String code;
     byte[] content;
     String status;
     String date;
     String contentLength;
-    Boolean authorization = false;
+    Boolean authorization;
 
 
     public Response(String code, byte[] content) {
@@ -28,7 +34,7 @@ public class Response {
     }
 
     public Response(byte[] content) {
-        this.code = "HTTP/1.1 200 OK";
+        this.code = CODE200;
         this.content = content;
         this.status = getStatus(this.code);
         this.date = new Date().toString();
@@ -57,33 +63,8 @@ public class Response {
             socket.getOutputStream().write(response.getContent());
         }
         socket.close();
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public Boolean getAuthorization() {
-        return authorization;
-    }
-
-    public void setNeedAuthorization(Boolean needAuthorization) {
-        this.authorization = needAuthorization;
-    }
-
-    public String getContentLength() {
-        return contentLength;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public byte[] getContent() {
-        return content;
+        if (!Objects.equals(response.getCode(), CODE200)) {
+            log.warn("Request failed with {}", response.getCode());
+        }
     }
 }
